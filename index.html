@@ -57,13 +57,22 @@
   .stat-sub { font-size: 12px; color: var(--jar-green-light); border-top: 1px dashed var(--line); padding-top: 10px; }
   .stat-sub span { font-weight: 700; color: var(--copper); }
 
-  .entry-form { display: flex; gap: 8px; margin-bottom: 22px; }
+  .entry-form { display: flex; flex-direction: column; gap: 8px; margin-bottom: 22px; }
+  .input-group { display: flex; gap: 8px; }
+  
+  .entry-form select {
+    font-family: 'JetBrains Mono', monospace; font-size: 14px; font-weight: 700;
+    padding: 12px; border-radius: 10px; border: 2px solid var(--line);
+    background: white; color: var(--jar-green); outline: none; cursor: pointer;
+  }
+
   .entry-form input {
     flex: 1; font-family: 'JetBrains Mono', monospace; font-size: 16px;
     padding: 13px 14px; border-radius: 10px; border: 2px solid var(--line);
-    background: white; color: var(--ink); outline: none;
+    background: white; color: var(--ink); outline: none; width: 100%;
   }
-  .entry-form input:focus { border-color: var(--gold); }
+  .entry-form input:focus, .entry-form select:focus { border-color: var(--gold); }
+  
   .entry-form button {
     font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 14px;
     padding: 13px 18px; border-radius: 10px; border: none;
@@ -76,13 +85,14 @@
     border-bottom: 1px solid var(--line); padding-bottom: 6px;
   }
 
-  .ledger-container { max-height: 280px; overflow-y: auto; }
+  .ledger-container { max-height: 280px; overflow-y: auto; scroll-behavior: smooth; }
   .ledger-table { width: 100%; border-collapse: collapse; table-layout: fixed; }
   
   .ledger-table th {
     font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
     color: var(--copper); font-weight: 700; padding: 0 4px 8px;
     border-bottom: 1px solid var(--line); text-align: left;
+    position: sticky; top: 0; background: var(--cream); z-index: 1;
   }
   .ledger-table th.col-val { text-align: right; }
 
@@ -111,13 +121,16 @@
     </div>
 
     <div class="entry-form">
-      <input type="text" inputmode="decimal" id="amountInput" placeholder="Montant, ex. 45,00" autocomplete="off">
-      <button type="button" id="addBtn">Ajouter</button>
+      <select id="monthSelect"></select>
+      <div class="input-group">
+        <input type="text" inputmode="decimal" id="amountInput" placeholder="Montant, ex. 45,00" autocomplete="off">
+        <button type="button" id="addBtn">Ajouter</button>
+      </div>
     </div>
 
     <div class="ledger-title">Montants enregistrés</div>
     
-    <div class="ledger-container">
+    <div class="ledger-container" id="ledgerContainer">
       <table class="ledger-table">
         <thead>
           <tr>
@@ -147,10 +160,19 @@ if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(() => {}));
 }
 
+function initMonthSelect() {
+  const select = document.getElementById('monthSelect');
+  select.innerHTML = MONTHS.map((m, idx) => `
+    <option value="${idx}" ${idx === currentMonthIdx ? 'selected' : ''}>
+      ${m} ${currentYear} ${idx === currentMonthIdx ? '(en cours)' : ''}
+    </option>
+  `).join('');
+}
+
 const parseAmount = str => str ? parseFloat(str.replace(/\s/g, '').replace(',', '.').replace('€', '')) : NaN;
 const fmt = n => n.toLocaleString('fr-FR', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' €';
 
-function render() {
+function render(scrollToIdx = null) {
   const ledger = document.getElementById('ledger');
   let grandTotal = 0;
   let activeMonthsCount = 0;
@@ -179,7 +201,7 @@ function render() {
     grandTotal += rawAmount;
 
     return `
-      <tr>
+      <tr id="row-month-${idx}">
         <td class="month-col">${monthName} ${currentYear} ${isCurrent ? '<b>(en cours)</b>' : ''}</td>
         <td class="val-col">${fmt(rawAmount)} ${note}</td>
       </tr>
@@ -192,19 +214,26 @@ function render() {
   document.getElementById('totalDetail').innerHTML = `Total réel cumulé : <span>${fmt(grandTotal)}</span>`;
 
   localStorage.setItem(KEY, JSON.stringify(store));
+
+  if (scrollToIdx !== null) {
+    const targetRow = document.getElementById(`row-month-${scrollToIdx}`);
+    if (targetRow) targetRow.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
 }
 
 function addEntry() {
   const input = document.getElementById('amountInput');
+  const monthSelect = document.getElementById('monthSelect');
+  const selectedIdx = parseInt(monthSelect.value, 10);
   const amt = parseAmount(input.value);
   
   if (isNaN(amt) || amt <= 0) return;
 
-  const currentVal = store[currentMonthIdx] || 0;
-  store[currentMonthIdx] = Math.round((currentVal + amt) * 100) / 100;
+  const currentVal = store[selectedIdx] || 0;
+  store[selectedIdx] = Math.round((currentVal + amt) * 100) / 100;
   
   input.value = '';
-  render();
+  render(selectedIdx);
 }
 
 document.getElementById('addBtn').addEventListener('click', addEntry);
@@ -220,6 +249,7 @@ document.getElementById('resetBtn').addEventListener('click', () => {
   render(); 
 });
 
+initMonthSelect();
 render();
 </script>
 </body>
