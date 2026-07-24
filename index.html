@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>Suivi Mensuel — Moyenne</title>
+
+<meta name="theme-color" content="#f6f1e4">
+<link rel="manifest" href="manifest.json">
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+  :root {
+    --ink: #132a22;
+    --jar-green: #1b3a2f;
+    --jar-green-light: #2b5142;
+    --gold: #c9a227;
+    --cream: #f6f1e4;
+    --copper: #a85c32;
+    --line: rgba(19,42,34,0.12);
+    color-scheme: light;
+  }
+
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+  html, body {
+    margin: 0; padding: 0; width: 100%; min-height: 100vh; min-height: -webkit-fill-available;
+    background-color: var(--cream) !important; color: var(--ink);
+    font-family: 'JetBrains Mono', monospace; overscroll-behavior: none;
+  }
+
+  body {
+    padding: 28px 18px calc(20px + env(safe-area-inset-bottom, 20px));
+    display: flex; flex-direction: column; align-items: center;
+  }
+
+  .wrap { width: 100%; max-width: 420px; }
+
+  .eyebrow {
+    font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--copper); text-align: center; margin-bottom: 6px; font-weight: 700;
+  }
+
+  h1 {
+    font-family: 'Fraunces', serif; font-weight: 600; font-size: 30px;
+    text-align: center; margin: 0 0 16px; color: var(--jar-green); letter-spacing: -0.01em;
+  }
+
+  .month-picker {
+    display: flex; justify-content: space-between; align-items: center;
+    background: white; border: 2px solid var(--line); border-radius: 12px;
+    padding: 6px 12px; margin-bottom: 22px;
+  }
+  .month-picker select {
+    font-family: 'JetBrains Mono', monospace; font-size: 15px; font-weight: 700;
+    border: none; background: transparent; color: var(--jar-green); outline: none; cursor: pointer;
+  }
+
+  .stats-card {
+    background: linear-gradient(180deg, rgba(27,58,47,0.06), rgba(27,58,47,0.11));
+    border: 3px solid var(--jar-green); border-radius: 18px;
+    padding: 18px; text-align: center; margin-bottom: 22px;
+  }
+  .stat-label { font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--copper); font-weight: 700; }
+  .stat-main { font-family: 'Fraunces', serif; font-weight: 700; font-size: 42px; color: var(--jar-green); margin: 2px 0 12px; }
+  .stat-sub { font-size: 12px; color: var(--jar-green-light); border-top: 1px dashed var(--line); padding-top: 8px; }
+  .stat-sub span { font-weight: 700; color: var(--copper); }
+
+  .entry-form { display: flex; gap: 8px; margin-bottom: 18px; }
+  .entry-form input {
+    flex: 1; font-family: 'JetBrains Mono', monospace; font-size: 17px;
+    padding: 13px 14px; border-radius: 10px; border: 2px solid var(--line);
+    background: white; color: var(--ink); outline: none;
+  }
+  .entry-form input:focus { border-color: var(--gold); }
+  .entry-form button {
+    font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 14px;
+    padding: 13px 18px; border-radius: 10px; border: none;
+    background: var(--jar-green); color: var(--cream); cursor: pointer;
+  }
+
+  .ledger-container { max-height: 220px; overflow-y: auto; }
+  .ledger-table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+  .ledger-table th {
+    font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--copper); font-weight: 700; padding: 0 4px 6px;
+    border-bottom: 1px solid var(--line); text-align: left;
+    position: sticky; top: 0; background: var(--cream); z-index: 1;
+  }
+  .ledger-table th.col-del { width: 35px; }
+
+  .ledger-table td { padding: 11px 4px; border-bottom: 1px dashed var(--line); font-size: 15px; }
+  .ledger-table .del-cell { text-align: right; width: 35px; }
+  .ledger-table .del { background: none; border: none; color: var(--line); font-size: 16px; cursor: pointer; padding: 0; }
+  .ledger-table .del:active { color: var(--copper); }
+
+  .empty { text-align: center; color: var(--jar-green-light); font-size: 13px; padding: 24px 0; opacity: 0.7; }
+  .reset-row { margin-top: 22px; text-align: center; }
+  .reset {
+    font-family: 'JetBrains Mono', monospace; font-size: 12px; text-transform: uppercase;
+    background: none; border: 1px solid var(--copper); color: var(--copper);
+    padding: 10px 16px; border-radius: 20px; cursor: pointer;
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="eyebrow">Calculateur de dépenses</div>
+    <h1>Moyenne Mensuelle</h1>
+
+    <div class="month-picker">
+      <span class="stat-label">Période</span>
+      <select id="monthSelect"></select>
+    </div>
+
+    <div class="stats-card">
+      <div class="stat-label">Moyenne par jour</div>
+      <div class="stat-main" id="avgResult">0,00 €</div>
+      <div class="stat-sub" id="daysDetail">Calculé sur 0 jour</div>
+    </div>
+
+    <div class="entry-form">
+      <input type="text" inputmode="decimal" id="amountInput" placeholder="Montant, ex. 45,00" autocomplete="off">
+      <button type="button" id="addBtn">Ajouter</button>
+    </div>
+
+    <div class="ledger-container">
+      <table class="ledger-table">
+        <thead>
+          <tr>
+            <th>Montants enregistrés</th>
+            <th class="col-del"></th>
+          </tr>
+        </thead>
+        <tbody id="ledger"></tbody>
+      </table>
+    </div>
+
+    <div class="empty" id="emptyMsg">Aucun montant pour ce mois.</div>
+
+    <div class="reset-row">
+      <button class="reset" id="resetBtn" type="button">Vider ce mois</button>
+    </div>
+  </div>
+
+<script>
+const KEY = 'monthly-tracker-data';
+const MONTHS = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
+
+let store = JSON.parse(localStorage.getItem(KEY) || '{}');
+const now = new Date();
+let currentYear = now.getFullYear();
+let selectedMonth = now.getMonth();
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(() => {}));
+}
+
+function initPicker() {
+  const select = document.getElementById('monthSelect');
+  select.innerHTML = MONTHS.map((m, i) => `<option value="${i}">${m} ${currentYear}</option>`).join('');
+  select.value = selectedMonth;
+  select.onchange = e => { selectedMonth = parseInt(e.target.value, 10); render(); };
+}
+
+function getEffectiveDays(year, month) {
+  const today = new Date();
+  const totalDaysInMonth = new Date(year, month + 1, 0).getDate();
+
+  if (year === today.getFullYear() && month === today.getMonth()) {
+    return today.getDate(); // Jour exact en cours
+  } else if (year < today.getFullYear() || (year === today.getFullYear() && month < today.getMonth())) {
+    return totalDaysInMonth; // Mois totalement écoulé
+  }
+  return 0; // Mois futur
+}
+
+const parseAmount = str => str ? parseFloat(str.replace(/\s/g, '').replace(',', '.').replace('€', '')) : NaN;
+const fmt = n => n.toLocaleString('fr-FR', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' €';
+
+function render() {
+  const entries = store[selectedMonth] || [];
+  const ledger = document.getElementById('ledger');
+  document.getElementById('emptyMsg').style.display = entries.length === 0 ? 'block' : 'none';
+
+  ledger.innerHTML = entries.map((amt, idx) => `
+    <tr>
+      <td>${fmt(amt)}</td>
+      <td class="del-cell"><button class="del" data-idx="${idx}">✕</button></td>
+    </tr>
+  `).join('');
+
+  const totalSum = entries.reduce((s, a) => s + a, 0);
+  const days = getEffectiveDays(currentYear, selectedMonth);
+  const avg = days > 0 ? totalSum / days : 0;
+
+  document.getElementById('avgResult').textContent = fmt(avg);
+  document.getElementById('daysDetail').innerHTML = days > 0 
+    ? `Total : <b>${fmt(totalSum)}</b> sur <span>${days} j</span>`
+    : `Total : <b>${fmt(totalSum)}</b> (mois futur)`;
+
+  localStorage.setItem(KEY, JSON.stringify(store));
+}
+
+function addEntry() {
+  const input = document.getElementById('amountInput');
+  const amt = parseAmount(input.value);
+  if (isNaN(amt) || amt <= 0) return;
+  
+  if (!store[selectedMonth]) store[selectedMonth] = [];
+  store[selectedMonth].push(Math.round(amt * 100) / 100);
+  input.value = '';
+  render();
+}
+
+document.getElementById('addBtn').onclick = addEntry;
+document.getElementById('amountInput').onkeydown = e => e.key === 'Enter' && addEntry();
+document.getElementById('ledger').onclick = e => {
+  if (e.target.classList.contains('del')) {
+    store[selectedMonth].splice(parseInt(e.target.dataset.idx, 10), 1);
+    render();
+  }
+};
+document.getElementById('resetBtn').onclick = () => { store[selectedMonth] = []; render(); };
+
+initPicker();
+render();
+</script>
+</body>
+</html>
