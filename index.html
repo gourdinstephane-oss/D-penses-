@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>Calculateur de dépenses — Moyenne Mensuelle</title>
+<title>Calculateur de dépenses moyennes</title>
 
 <meta name="theme-color" content="#f6f1e4">
 <link rel="manifest" href="manifest.json">
@@ -38,13 +38,8 @@
   .wrap { width: 100%; max-width: 420px; }
 
   .eyebrow {
-    font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
-    color: var(--copper); text-align: center; margin-bottom: 6px; font-weight: 700;
-  }
-
-  h1 {
-    font-family: 'Fraunces', serif; font-weight: 600; font-size: 30px;
-    text-align: center; margin: 0 0 22px; color: var(--jar-green); letter-spacing: -0.01em;
+    font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--copper); text-align: center; margin-bottom: 22px; font-weight: 700;
   }
 
   .stats-card {
@@ -99,7 +94,6 @@
   .ledger-table td { padding: 10px 2px; border-bottom: 1px dashed var(--line); font-size: 14px; }
   .ledger-table .month-col { color: var(--ink); text-align: left; font-weight: 500; width: 45%; }
   .ledger-table .val-col { text-align: right; color: var(--jar-green); font-weight: 700; width: 40%; }
-  .ledger-table .val-col .sub-info { font-size: 10px; font-weight: 400; color: var(--copper); display: block; }
   
   .ledger-table .del-cell { text-align: right; width: 15%; }
   .ledger-table .del-btn {
@@ -118,8 +112,7 @@
 </head>
 <body>
   <div class="wrap">
-    <div class="eyebrow">Calculateur de dépenses</div>
-    <h1>Moyenne Mensuelle</h1>
+    <div class="eyebrow">Calculateur de dépenses moyennes</div>
 
     <div class="stats-card">
       <div class="stat-label">Moyenne mensuelle</div>
@@ -184,25 +177,12 @@ function render(scrollToIdx = null) {
   const ledger = document.getElementById('ledger');
   let grandTotal = 0;
   let activeMonthsCount = 0;
-  let projectedGrandTotal = 0;
-
-  const dayOfMonth = today.getDate();
-  const totalDaysInCurrentMonth = new Date(currentYear, currentMonthIdx + 1, 0).getDate();
 
   ledger.innerHTML = MONTHS.map((monthName, idx) => {
     const rawAmount = store[idx] || 0;
     const isCurrent = idx === currentMonthIdx;
-    const isPast = idx < currentMonthIdx;
 
-    let note = '';
-
-    if (isCurrent) {
-      const projected = dayOfMonth > 0 ? (rawAmount / dayOfMonth) * totalDaysInCurrentMonth : 0;
-      projectedGrandTotal += projected;
-      activeMonthsCount += 1;
-      note = `<span class="sub-info">(Prorata: ${fmt(projected)})</span>`;
-    } else if (isPast || rawAmount > 0) {
-      projectedGrandTotal += rawAmount;
+    if (rawAmount > 0) {
       activeMonthsCount += 1;
     }
 
@@ -211,7 +191,7 @@ function render(scrollToIdx = null) {
     return `
       <tr id="row-month-${idx}">
         <td class="month-col">${monthName} ${currentYear} ${isCurrent ? '<b>(en cours)</b>' : ''}</td>
-        <td class="val-col">${fmt(rawAmount)} ${note}</td>
+        <td class="val-col">${fmt(rawAmount)}</td>
         <td class="del-cell">
           ${rawAmount > 0 ? `<button type="button" class="del-btn" data-month="${idx}">✕</button>` : ''}
         </td>
@@ -219,7 +199,8 @@ function render(scrollToIdx = null) {
     `;
   }).join('');
 
-  const overallAvg = activeMonthsCount > 0 ? projectedGrandTotal / activeMonthsCount : 0;
+  // Moyenne classique : Somme des montants / Nombre de mois avec un montant renseigné
+  const overallAvg = activeMonthsCount > 0 ? grandTotal / activeMonthsCount : 0;
 
   document.getElementById('avgResult').textContent = fmt(overallAvg);
   document.getElementById('totalDetail').innerHTML = `Total réel cumulé : <span>${fmt(grandTotal)}</span>`;
