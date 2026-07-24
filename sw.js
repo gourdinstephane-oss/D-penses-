@@ -1,10 +1,17 @@
-const CACHE_NAME = 'D-penses-v1'; //[span_3](start_span)[span_3](end_span)
+const CACHE_NAME = 'depenses-v1';
 
-self.oninstall = () => self.skipWaiting(); //[span_4](start_span)[span_4](end_span)
+self.addEventListener('install', (e) => {
+  e.waitUntil(
+    caches.open(CACHE_NAME).then((cache) => {
+      return cache.addAll(['./', './index.html', './manifest.json']);
+    })
+  );
+});
 
-self.onactivate = (e) => {
-  e.waitUntil(caches.keys().then(keys => Promise.all(keys.map(k => caches.delete(k))))); //[span_5](start_span)[span_5](end_span)
-  self.clients.claim(); //[span_6](start_span)[span_6](end_span)
-};
-
-self.onfetch = (e) => e.respondWith(fetch(e.request).catch(() => caches.match(e.request))); //[span_7](start_span)[span_7](end_span)
+self.addEventListener('fetch', (e) => {
+  e.respondWith(
+    caches.match(e.request).then((response) => {
+      return response || fetch(e.request);
+    })
+  );
+});
