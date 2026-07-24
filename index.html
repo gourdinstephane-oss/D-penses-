@@ -31,82 +31,81 @@
   }
 
   body {
-    padding: 28px 18px calc(20px + env(safe-area-inset-bottom, 20px));
+    padding: 16px 16px calc(12px + env(safe-area-inset-bottom, 12px));
     display: flex; flex-direction: column; align-items: center;
   }
 
   .wrap { width: 100%; max-width: 420px; }
 
   .eyebrow {
-    font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase;
-    color: var(--copper); text-align: center; margin-bottom: 22px; font-weight: 700;
+    font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--copper); text-align: center; margin-bottom: 12px; font-weight: 700;
   }
 
   .stats-card {
     background: linear-gradient(180deg, rgba(27,58,47,0.06), rgba(27,58,47,0.11));
-    border: 3px solid var(--jar-green); border-radius: 18px;
-    padding: 20px 18px; text-align: center; margin-bottom: 22px;
+    border: 2px solid var(--jar-green); border-radius: 14px;
+    padding: 12px 14px; text-align: center; margin-bottom: 14px;
   }
-  .stat-label { font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--copper); font-weight: 700; }
-  .stat-main { font-family: 'Fraunces', serif; font-weight: 700; font-size: 48px; color: var(--jar-green); margin: 4px 0 12px; }
-  .stat-sub { font-size: 12px; color: var(--jar-green-light); border-top: 1px dashed var(--line); padding-top: 10px; }
+  .stat-label { font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--copper); font-weight: 700; }
+  .stat-main { font-family: 'Fraunces', serif; font-weight: 700; font-size: 36px; color: var(--jar-green); margin: 2px 0 6px; }
+  .stat-sub { font-size: 11px; color: var(--jar-green-light); border-top: 1px dashed var(--line); padding-top: 6px; }
   .stat-sub span { font-weight: 700; color: var(--copper); }
 
-  .entry-form { display: flex; flex-direction: column; gap: 8px; margin-bottom: 22px; }
-  .input-group { display: flex; gap: 8px; }
+  .entry-form { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+  .input-group { display: flex; gap: 6px; }
   
   .entry-form select {
-    font-family: 'JetBrains Mono', monospace; font-size: 14px; font-weight: 700;
-    padding: 12px; border-radius: 10px; border: 2px solid var(--line);
+    font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700;
+    padding: 8px 10px; border-radius: 8px; border: 1.5px solid var(--line);
     background: white; color: var(--jar-green); outline: none; cursor: pointer;
   }
 
   .entry-form input {
-    flex: 1; font-family: 'JetBrains Mono', monospace; font-size: 16px;
-    padding: 13px 14px; border-radius: 10px; border: 2px solid var(--line);
+    flex: 1; font-family: 'JetBrains Mono', monospace; font-size: 14px;
+    padding: 8px 10px; border-radius: 8px; border: 1.5px solid var(--line);
     background: white; color: var(--ink); outline: none; width: 100%;
   }
   .entry-form input:focus, .entry-form select:focus { border-color: var(--gold); }
   
   .entry-form button {
-    font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 14px;
-    padding: 13px 18px; border-radius: 10px; border: none;
+    font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 12px;
+    padding: 8px 14px; border-radius: 8px; border: none;
     background: var(--jar-green); color: var(--cream); cursor: pointer;
   }
 
   .ledger-title {
-    font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
-    color: var(--copper); font-weight: 700; margin-bottom: 8px;
-    border-bottom: 1px solid var(--line); padding-bottom: 6px;
+    font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--copper); font-weight: 700; margin-bottom: 4px;
+    border-bottom: 1px solid var(--line); padding-bottom: 4px;
   }
 
-  .ledger-container { max-height: 280px; overflow-y: auto; scroll-behavior: smooth; }
+  .ledger-container { overflow: visible; }
   .ledger-table { width: 100%; border-collapse: collapse; }
   
   .ledger-table th {
-    font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
-    color: var(--copper); font-weight: 700; padding: 0 4px 8px;
+    font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--copper); font-weight: 700; padding: 0 2px 4px;
     border-bottom: 1px solid var(--line); text-align: left;
-    position: sticky; top: 0; background: var(--cream); z-index: 1;
   }
-  .ledger-table th.col-val { text-align: right; }
+  .ledger-table th.col-val { text-align: left; }
 
-  .ledger-table td { padding: 10px 2px; border-bottom: 1px dashed var(--line); font-size: 14px; }
+  .ledger-table td { padding: 5px 2px; border-bottom: 1px dashed var(--line); font-size: 12px; }
   .ledger-table .month-col { color: var(--ink); text-align: left; font-weight: 500; width: 45%; }
-  .ledger-table .val-col { text-align: right; color: var(--jar-green); font-weight: 700; width: 40%; }
+  .ledger-table .val-col { text-align: left; color: var(--jar-green); font-weight: 700; width: 40%; }
   
   .ledger-table .del-cell { text-align: right; width: 15%; }
   .ledger-table .del-btn {
     background: var(--copper); border: none; color: white;
-    font-size: 11px; font-weight: 700; cursor: pointer; padding: 4px 8px; border-radius: 6px;
+    font-size: 10px; font-weight: 700; cursor: pointer; padding: 2px 6px; border-radius: 4px;
     display: inline-block;
   }
 
-  .reset-row { margin-top: 24px; text-align: center; }
+  .reset-row { margin-top: 12px; text-align: center; }
   .reset {
-    font-family: 'JetBrains Mono', monospace; font-size: 12px; text-transform: uppercase;
+    font-family: 'JetBrains Mono', monospace; font-size: 10px; text-transform: uppercase;
     background: none; border: 1px solid var(--copper); color: var(--copper);
-    padding: 10px 16px; border-radius: 20px; cursor: pointer;
+    padding: 6px 12px; border-radius: 16px; cursor: pointer;
   }
 </style>
 </head>
@@ -173,7 +172,7 @@ function initMonthSelect() {
 const parseAmount = str => str ? parseFloat(str.replace(/\s/g, '').replace(',', '.').replace('€', '')) : NaN;
 const fmt = n => n.toLocaleString('fr-FR', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' €';
 
-function render(scrollToIdx = null) {
+function render() {
   const ledger = document.getElementById('ledger');
   let grandTotal = 0;
   let activeMonthsCount = 0;
@@ -199,18 +198,12 @@ function render(scrollToIdx = null) {
     `;
   }).join('');
 
-  // Moyenne classique : Somme des montants / Nombre de mois avec un montant renseigné
   const overallAvg = activeMonthsCount > 0 ? grandTotal / activeMonthsCount : 0;
 
   document.getElementById('avgResult').textContent = fmt(overallAvg);
   document.getElementById('totalDetail').innerHTML = `Total réel cumulé : <span>${fmt(grandTotal)}</span>`;
 
   localStorage.setItem(KEY, JSON.stringify(store));
-
-  if (scrollToIdx !== null) {
-    const targetRow = document.getElementById(`row-month-${scrollToIdx}`);
-    if (targetRow) targetRow.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-  }
 }
 
 function addEntry() {
@@ -225,7 +218,7 @@ function addEntry() {
   store[selectedIdx] = Math.round((currentVal + amt) * 100) / 100;
   
   input.value = '';
-  render(selectedIdx);
+  render();
 }
 
 document.getElementById('addBtn').addEventListener('click', addEntry);
