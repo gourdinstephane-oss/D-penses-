@@ -107,7 +107,7 @@
     <div class="stats-card">
       <div class="stat-label">Moyenne mensuelle</div>
       <div class="stat-main" id="avgResult">0,00 €</div>
-      <div class="stat-sub" id="totalDetail">Total cumulé : <span>0,00 €</span></div>
+      <div class="stat-sub" id="totalDetail">Total réel cumulé : <span>0,00 €</span></div>
     </div>
 
     <div class="entry-form">
@@ -164,11 +164,9 @@ function render() {
     const isCurrent = idx === currentMonthIdx;
     const isPast = idx < currentMonthIdx;
 
-    let displayAmount = rawAmount;
     let note = '';
 
     if (isCurrent) {
-      // Projection du mois en cours basée sur les jours effectifs
       const projected = dayOfMonth > 0 ? (rawAmount / dayOfMonth) * totalDaysInCurrentMonth : 0;
       projectedGrandTotal += projected;
       activeMonthsCount += 1;
@@ -188,7 +186,6 @@ function render() {
     `;
   }).join('');
 
-  // Moyenne basée sur le nombre de mois écoulés/actifs
   const overallAvg = activeMonthsCount > 0 ? projectedGrandTotal / activeMonthsCount : 0;
 
   document.getElementById('avgResult').textContent = fmt(overallAvg);
@@ -200,17 +197,28 @@ function render() {
 function addEntry() {
   const input = document.getElementById('amountInput');
   const amt = parseAmount(input.value);
+  
   if (isNaN(amt) || amt <= 0) return;
 
-  // Ajout au mois en cours
-  store[currentMonthIdx] = (store[currentMonthIdx] || 0) + Math.round(amt * 100) / 100;
+  const currentVal = store[currentMonthIdx] || 0;
+  store[currentMonthIdx] = Math.round((currentVal + amt) * 100) / 100;
+  
   input.value = '';
   render();
 }
 
-document.getElementById('addBtn').onclick = addEntry;
-document.getElementById('amountInput').onkeydown = e => e.key === 'Enter' && addEntry();
-document.getElementById('resetBtn').onclick = () => { store = {}; render(); };
+document.getElementById('addBtn').addEventListener('click', addEntry);
+document.getElementById('amountInput').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    addEntry();
+  }
+});
+
+document.getElementById('resetBtn').addEventListener('click', () => { 
+  store = {}; 
+  render(); 
+});
 
 render();
 </script>
