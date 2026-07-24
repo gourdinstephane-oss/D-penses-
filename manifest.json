@@ -1,14 +1,20 @@
 {
-  "name": "Moyenne Mensuelle",
-  "short_name": "Moyenne",
+  "short_name": "Dépenses",
+  "name": "Calculateur de dépenses moyennes",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
   "start_url": "./index.html",
-  "display": "standalone",
   "background_color": "#f6f1e4",
   "theme_color": "#f6f1e4",
-  "icons": [{
-    "src": "./icon.png",
-    "sizes": "512x512",
-    "type": "image/png",
-    "purpose": "any maskable"
-  }]
+  "display": "standalone"
 }
