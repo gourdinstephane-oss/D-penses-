@@ -95,11 +95,19 @@
     position: sticky; top: 0; background: var(--cream); z-index: 1;
   }
   .ledger-table th.col-val { text-align: right; }
+  .ledger-table th.col-del { width: 30px; }
 
   .ledger-table td { padding: 12px 4px; border-bottom: 1px dashed var(--line); font-size: 15px; }
   .ledger-table .month-col { color: var(--ink); text-align: left; font-weight: 500; }
   .ledger-table .val-col { text-align: right; color: var(--jar-green); font-weight: 700; }
   .ledger-table .val-col .sub-info { font-size: 11px; font-weight: 400; color: var(--copper); display: block; }
+  
+  .ledger-table .del-cell { text-align: center; width: 30px; }
+  .ledger-table .del-btn {
+    background: none; border: none; color: var(--line); font-size: 14px;
+    cursor: pointer; padding: 2px 4px; border-radius: 4px;
+  }
+  .ledger-table .del-btn:hover, .ledger-table .del-btn:active { color: var(--copper); }
 
   .reset-row { margin-top: 24px; text-align: center; }
   .reset {
@@ -136,6 +144,7 @@
           <tr>
             <th>Mois</th>
             <th class="col-val">Montant</th>
+            <th class="col-del"></th>
           </tr>
         </thead>
         <tbody id="ledger"></tbody>
@@ -143,7 +152,7 @@
     </div>
 
     <div class="reset-row">
-      <button class="reset" id="resetBtn" type="button">Remettre à zéro</button>
+      <button class="reset" id="resetBtn" type="button">Tout remettre à zéro</button>
     </div>
   </div>
 
@@ -204,6 +213,9 @@ function render(scrollToIdx = null) {
       <tr id="row-month-${idx}">
         <td class="month-col">${monthName} ${currentYear} ${isCurrent ? '<b>(en cours)</b>' : ''}</td>
         <td class="val-col">${fmt(rawAmount)} ${note}</td>
+        <td class="del-cell">
+          ${rawAmount > 0 ? `<button class="del-btn" onclick="resetMonth(${idx})" title="Vider ce mois">✕</button>` : ''}
+        </td>
       </tr>
     `;
   }).join('');
@@ -236,6 +248,11 @@ function addEntry() {
   render(selectedIdx);
 }
 
+function resetMonth(monthIdx) {
+  delete store[monthIdx];
+  render();
+}
+
 document.getElementById('addBtn').addEventListener('click', addEntry);
 document.getElementById('amountInput').addEventListener('keydown', (e) => {
   if (e.key === 'Enter') {
@@ -253,4 +270,5 @@ initMonthSelect();
 render();
 </script>
 </body>
-</html>
+  </html>
+  
