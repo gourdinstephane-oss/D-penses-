@@ -31,81 +31,82 @@
   }
 
   body {
-    padding: 12px 10px calc(12px + env(safe-area-inset-bottom, 12px));
-    display: flex; flex-direction: column; align-items: center;
+    padding: 16px 14px calc(16px + env(safe-area-inset-bottom, 16px));
+    display: flex; flex-direction: column; align-items: center; justify-content: space-between;
+    min-height: 100vh;
   }
 
-  .wrap { width: 100%; max-width: 100%; }
+  .wrap { width: 100%; max-width: 100%; display: flex; flex-direction: column; flex: 1; }
 
   .eyebrow {
     font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
-    color: var(--copper); text-align: center; margin-bottom: 10px; font-weight: 700;
+    color: var(--copper); text-align: center; margin-bottom: 14px; font-weight: 700;
   }
 
   .stats-card {
     background: linear-gradient(180deg, rgba(27,58,47,0.06), rgba(27,58,47,0.11));
-    border: 2px solid var(--jar-green); border-radius: 14px;
-    padding: 12px 14px; text-align: center; margin-bottom: 12px; width: 100%;
+    border: 2px solid var(--jar-green); border-radius: 16px;
+    padding: 18px 16px; text-align: center; margin-bottom: 16px; width: 100%;
   }
-  .stat-label { font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--copper); font-weight: 700; }
-  .stat-main { font-family: 'Fraunces', serif; font-weight: 700; font-size: 38px; color: var(--jar-green); margin: 2px 0 6px; }
-  .stat-sub { font-size: 11px; color: var(--jar-green-light); border-top: 1px dashed var(--line); padding-top: 6px; }
+  .stat-label { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--copper); font-weight: 700; }
+  .stat-main { font-family: 'Fraunces', serif; font-weight: 700; font-size: 44px; color: var(--jar-green); margin: 4px 0 8px; }
+  .stat-sub { font-size: 12px; color: var(--jar-green-light); border-top: 1px dashed var(--line); padding-top: 8px; }
   .stat-sub span { font-weight: 700; color: var(--copper); }
 
-  .entry-form { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; width: 100%; }
-  .input-group { display: flex; gap: 6px; }
+  .entry-form { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; width: 100%; }
+  .input-group { display: flex; gap: 8px; }
   
   .entry-form select {
-    font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 700;
-    padding: 8px 10px; border-radius: 8px; border: 1.5px solid var(--line);
+    font-family: 'JetBrains Mono', monospace; font-size: 14px; font-weight: 700;
+    padding: 11px 12px; border-radius: 10px; border: 1.5px solid var(--line);
     background: white; color: var(--jar-green); outline: none; cursor: pointer; width: 100%;
   }
 
   .entry-form input {
-    flex: 1; font-family: 'JetBrains Mono', monospace; font-size: 14px;
-    padding: 8px 10px; border-radius: 8px; border: 1.5px solid var(--line);
+    flex: 1; font-family: 'JetBrains Mono', monospace; font-size: 15px;
+    padding: 11px 12px; border-radius: 10px; border: 1.5px solid var(--line);
     background: white; color: var(--ink); outline: none; width: 100%;
   }
   .entry-form input:focus, .entry-form select:focus { border-color: var(--gold); }
   
   .entry-form button {
-    font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 12px;
-    padding: 8px 16px; border-radius: 8px; border: none;
+    font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 13px;
+    padding: 11px 18px; border-radius: 10px; border: none;
     background: var(--jar-green); color: var(--cream); cursor: pointer;
   }
 
   .ledger-title {
-    font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase;
-    color: var(--copper); font-weight: 700; margin-bottom: 4px;
-    border-bottom: 1px solid var(--line); padding-bottom: 4px; width: 100%;
+    font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--copper); font-weight: 700; margin-bottom: 6px;
+    border-bottom: 1px solid var(--line); padding-bottom: 6px; width: 100%;
   }
 
-  .ledger-container { overflow: visible; width: 100%; }
+  .ledger-container { overflow: visible; width: 100%; flex: 1; }
   .ledger-table { width: 100%; border-collapse: collapse; }
   
   .ledger-table th {
-    font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase;
-    color: var(--copper); font-weight: 700; padding: 0 2px 4px;
+    font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--copper); font-weight: 700; padding: 0 2px 6px;
     border-bottom: 1px solid var(--line); text-align: left;
   }
   .ledger-table th.col-val { text-align: left; padding-left: 16px; }
 
-  .ledger-table td { padding: 5px 2px; border-bottom: 1px dashed var(--line); font-size: 12px; }
+  .ledger-table td { padding: 11px 2px; border-bottom: 1px dashed var(--line); font-size: 13.5px; }
   .ledger-table .month-col { color: var(--ink); text-align: left; font-weight: 500; width: 55%; }
   .ledger-table .val-col { text-align: left; color: var(--jar-green); font-weight: 700; width: 33%; padding-left: 16px; }
   
   .ledger-table .del-cell { text-align: right; width: 12%; }
   .ledger-table .del-btn {
     background: var(--copper); border: none; color: white;
-    font-size: 10px; font-weight: 700; cursor: pointer; padding: 2px 6px; border-radius: 4px;
+    font-size: 11px; font-weight: 700; cursor: pointer; padding: 3px 7px; border-radius: 4px;
     display: inline-block;
   }
 
-  .reset-row { margin-top: 10px; text-align: center; width: 100%; }
+  .reset-row { margin-top: auto; padding-top: 16px; text-align: center; width: 100%; }
   .reset {
-    font-family: 'JetBrains Mono', monospace; font-size: 10px; text-transform: uppercase;
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; text-transform: uppercase;
     background: none; border: 1px solid var(--copper); color: var(--copper);
-    padding: 6px 12px; border-radius: 16px; cursor: pointer;
+    padding: 8px 16px; border-radius: 18px; cursor: pointer;
   }
 </style>
 </head>
@@ -246,5 +247,4 @@ initMonthSelect();
 render();
 </script>
 </body>
-  </html>
-  
+</html>
