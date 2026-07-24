@@ -9,16 +9,17 @@
 <link rel="manifest" href="manifest.json">
 
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=JetBrains+Mono:wght@400;500;700&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
 
   :root {
     --ink: #132a22;
     --jar-green: #1b3a2f;
     --jar-green-light: #2b5142;
     --gold: #c9a227;
-    --cream: #f6f1e4;
+    --cream: #f8f5eb;
     --copper: #a85c32;
-    --line: rgba(19,42,34,0.12);
+    --line: rgba(19, 42, 34, 0.1);
+    --card-bg: rgba(255, 255, 255, 0.5);
     color-scheme: light;
   }
 
@@ -31,79 +32,91 @@
   }
 
   body {
-    padding: 16px 14px calc(16px + env(safe-area-inset-bottom, 16px));
+    padding: 24px 16px calc(24px + env(safe-area-inset-bottom, 24px));
     display: flex; flex-direction: column; align-items: center; justify-content: space-between;
   }
 
-  .wrap { width: 100%; display: flex; flex-direction: column; flex: 1; }
+  .wrap { width: 100%; max-width: 480px; display: flex; flex-direction: column; flex: 1; gap: 20px; }
 
   .eyebrow {
-    font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
-    color: var(--copper); text-align: center; margin-bottom: 14px; font-weight: 700;
+    font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--copper); text-align: center; font-weight: 700;
   }
 
+  /* Carte statistiques modernisée */
   .stats-card {
-    background: linear-gradient(180deg, rgba(27,58,47,0.06), rgba(27,58,47,0.11));
-    border: 2px solid var(--jar-green); border-radius: 16px;
-    padding: 18px 16px; text-align: center; margin-bottom: 16px; width: 100%;
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.7), rgba(27, 58, 47, 0.05));
+    border: 1.5px solid var(--jar-green); border-radius: 20px;
+    padding: 22px 20px; text-align: center; width: 100%;
+    box-shadow: 0 4px 20px rgba(19, 42, 34, 0.04);
   }
-  .stat-label { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--copper); font-weight: 700; }
-  .stat-main { font-family: 'Fraunces', serif; font-weight: 700; font-size: 44px; color: var(--jar-green); margin: 4px 0 8px; }
-  .stat-sub { font-size: 12px; color: var(--jar-green-light); border-top: 1px dashed var(--line); padding-top: 8px; }
+  .stat-label { font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--copper); font-weight: 700; }
+  .stat-main { font-family: 'Fraunces', serif; font-weight: 700; font-size: 46px; color: var(--jar-green); margin: 6px 0 10px; line-height: 1; }
+  .stat-sub { font-size: 12px; color: var(--jar-green-light); border-top: 1px dashed var(--line); padding-top: 10px; margin-top: 4px; }
   .stat-sub span { font-weight: 700; color: var(--copper); }
 
-  .entry-form { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; width: 100%; }
-  .input-group { display: flex; gap: 8px; }
+  /* Formulaire avec plus de relief */
+  .entry-form { display: flex; flex-direction: column; gap: 10px; width: 100%; }
+  .input-group { display: flex; gap: 10px; }
   
   .entry-form select, .entry-form input, .entry-form button {
-    font-family: inherit; border-radius: 10px; outline: none;
+    font-family: inherit; border-radius: 12px; outline: none; transition: all 0.2s ease;
   }
 
   .entry-form select {
-    font-size: 14px; font-weight: 700; padding: 11px 12px;
+    font-size: 14px; font-weight: 600; padding: 12px 14px;
     border: 1.5px solid var(--line); background: white; color: var(--jar-green);
-    cursor: pointer; width: 100%;
+    cursor: pointer; width: 100%; box-shadow: 0 2px 8px rgba(0,0,0,0.02);
   }
 
   .entry-form input {
-    flex: 1; font-size: 15px; padding: 11px 12px;
+    flex: 1; font-size: 15px; padding: 12px 14px;
     border: 1.5px solid var(--line); background: white; color: var(--ink); width: 100%;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.02);
   }
-  .entry-form input:focus, .entry-form select:focus { border-color: var(--gold); }
+  .entry-form input:focus, .entry-form select:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(201, 162, 39, 0.15); }
   
   .entry-form button {
-    font-weight: 700; font-size: 13px; padding: 11px 18px;
+    font-weight: 700; font-size: 13px; padding: 12px 20px;
     border: none; background: var(--jar-green); color: var(--cream); cursor: pointer;
+    box-shadow: 0 4px 12px rgba(27, 58, 47, 0.15);
   }
+  .entry-form button:active { transform: scale(0.98); }
 
-  .ledger-container { overflow: visible; width: 100%; flex: 1; }
+  /* Tableau aéré */
+  .ledger-container { width: 100%; flex: 1; margin-top: 4px; }
   .ledger-table { width: 100%; border-collapse: collapse; }
   
   .ledger-table th {
-    font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
-    color: var(--copper); font-weight: 700; padding: 0 2px 6px;
-    border-bottom: 1px solid var(--line); text-align: left;
+    font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--copper); font-weight: 700; padding: 0 4px 8px;
+    border-bottom: 1.5px solid var(--line); text-align: left;
   }
   .ledger-table th.col-val { padding-left: 16px; }
 
-  .ledger-table td { padding: 11px 2px; border-bottom: 1px dashed var(--line); font-size: 13.5px; }
+  .ledger-table td { padding: 13px 4px; border-bottom: 1px dashed var(--line); font-size: 13.5px; }
   .ledger-table .month-col { color: var(--ink); text-align: left; font-weight: 500; width: 55%; }
+  .ledger-table .month-col b { color: var(--copper); font-weight: 600; }
   .ledger-table .val-col { text-align: left; color: var(--jar-green); font-weight: 700; width: 33%; padding-left: 16px; }
-  .ledger-table .val-col .sub-info { font-size: 10px; font-weight: 400; color: var(--copper); display: block; }
+  .ledger-table .val-col .sub-info { font-size: 10px; font-weight: 500; color: var(--copper); display: block; margin-top: 2px; }
   
   .ledger-table .del-cell { text-align: right; width: 12%; }
   .ledger-table .del-btn {
-    background: var(--copper); border: none; color: white;
-    font-size: 11px; font-weight: 700; cursor: pointer; padding: 3px 7px; border-radius: 4px;
-    display: inline-block;
+    background: rgba(168, 92, 50, 0.12); border: none; color: var(--copper);
+    font-size: 12px; font-weight: 700; cursor: pointer; padding: 4px 8px; border-radius: 6px;
+    transition: all 0.2s;
   }
+  .ledger-table .del-btn:hover { background: var(--copper); color: white; }
 
-  .reset-row { margin-top: auto; padding-top: 16px; text-align: center; width: 100%; }
+  /* Bouton réinitialiser */
+  .reset-row { margin-top: auto; padding-top: 12px; text-align: center; width: 100%; }
   .reset {
-    font-family: inherit; font-size: 11px; text-transform: uppercase;
-    background: none; border: 1px solid var(--copper); color: var(--copper);
-    padding: 8px 16px; border-radius: 18px; cursor: pointer;
+    font-family: inherit; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em;
+    background: transparent; border: 1.5px solid var(--copper); color: var(--copper);
+    padding: 10px 20px; border-radius: 20px; cursor: pointer; font-weight: 600;
+    transition: all 0.2s ease;
   }
+  .reset:active { background: rgba(168, 92, 50, 0.1); }
 </style>
 </head>
 <body>
