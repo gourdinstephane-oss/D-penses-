@@ -86,7 +86,7 @@
   }
 
   .ledger-container { max-height: 280px; overflow-y: auto; scroll-behavior: smooth; }
-  .ledger-table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+  .ledger-table { width: 100%; border-collapse: collapse; }
   
   .ledger-table th {
     font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
@@ -95,20 +95,18 @@
     position: sticky; top: 0; background: var(--cream); z-index: 1;
   }
   .ledger-table th.col-val { text-align: right; }
-  .ledger-table th.col-del { width: 36px; text-align: center; }
 
-  .ledger-table td { padding: 12px 4px; border-bottom: 1px dashed var(--line); font-size: 15px; }
-  .ledger-table .month-col { color: var(--ink); text-align: left; font-weight: 500; }
-  .ledger-table .val-col { text-align: right; color: var(--jar-green); font-weight: 700; }
-  .ledger-table .val-col .sub-info { font-size: 11px; font-weight: 400; color: var(--copper); display: block; }
+  .ledger-table td { padding: 10px 2px; border-bottom: 1px dashed var(--line); font-size: 14px; }
+  .ledger-table .month-col { color: var(--ink); text-align: left; font-weight: 500; width: 45%; }
+  .ledger-table .val-col { text-align: right; color: var(--jar-green); font-weight: 700; width: 40%; }
+  .ledger-table .val-col .sub-info { font-size: 10px; font-weight: 400; color: var(--copper); display: block; }
   
-  .ledger-table .del-cell { text-align: center; width: 36px; }
+  .ledger-table .del-cell { text-align: right; width: 15%; }
   .ledger-table .del-btn {
-    background: rgba(168, 92, 50, 0.1); border: 1px solid var(--copper); color: var(--copper);
-    font-size: 12px; font-weight: 700; cursor: pointer; padding: 4px 8px; border-radius: 6px;
-    display: inline-flex; align-items: center; justify-content: center;
+    background: var(--copper); border: none; color: white;
+    font-size: 11px; font-weight: 700; cursor: pointer; padding: 4px 8px; border-radius: 6px;
+    display: inline-block;
   }
-  .ledger-table .del-btn:active { background: var(--copper); color: white; }
 
   .reset-row { margin-top: 24px; text-align: center; }
   .reset {
@@ -145,7 +143,7 @@
           <tr>
             <th>Mois</th>
             <th class="col-val">Montant</th>
-            <th class="col-del"></th>
+            <th style="width:15%"></th>
           </tr>
         </thead>
         <tbody id="ledger"></tbody>
